@@ -20,5 +20,15 @@ services:
       - 5000:5000
     depends_on:
       - db
+
+  shiny:
+    build:
+      context: ./shiny
+    restart: unless-stopped
+    ports:
+      - "3838:3838"
+    depends_on:
+      - db
+      - api
 volumes:
   data:
