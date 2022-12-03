@@ -37,16 +37,13 @@ def initialDBSetup():
     
     return "conexion valida"
 
+def get_schema(table_name, conn):
+    metadata = MetaData(bind=None)
+    return Table(table_name, metadata, autoload=True, autoload_with=conn)
 
 @app.route('/')
 def hello_world():
-    return 'Para iniciar el proyecto, ve al siguiente enlace: <a href=setup>Set up del proyecto</a>'
-
-@app.route("/setup")
-def setUp():
-    #resp = connectPsycopg2()
-    resp = initialDBSetup()
-    return str(resp) + "Inicia el setup"
+    return 'Hello world del proyecto. Ir a la de test <a href=test>Test page</a>'
 
 @app.route("/test")
 def api():
