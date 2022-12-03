@@ -8,8 +8,11 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
-    volumes: 
-      - db:/var/lib/postgresql/data
+    volumes:
+      - data:/var/lib/postgresql/data
+      # copy the sql script to create tables
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      
   api:
     build:
       context: ./api
@@ -18,5 +21,4 @@ services:
     depends_on:
       - db
 volumes:
-  db:
-    driver: local
+  data:
