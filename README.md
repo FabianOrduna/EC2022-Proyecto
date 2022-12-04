@@ -77,7 +77,7 @@ Número de columnas: 13
 * Clonar el repositorio
 
 ```
-git clone git@github.com:JSOHE/EC2022-Proyecto.git
+git clone git@github.com:FabianOrduna/EC2022-Proyecto.git
 ```
 
 * Cambiar al directorio del proyecto
