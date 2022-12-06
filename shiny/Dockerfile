@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libssl-dev
 RUN R -e 'install.packages(c(\
               "shiny", \
+              "shinyreforms", \
               "shinydashboard", \
               "ggplot2" \
             ), \
