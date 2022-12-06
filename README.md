@@ -20,6 +20,10 @@ Es un dataset simple se tiene la finalidad de predecir el precio de las casas ba
 
 El dataset es pequeño y com'lejo ya que contiene una fuerte multicolinealidad. 
 
+Puedes encontrarlo en la siguiente liga de [KAGGLE](https://www.kaggle.com/datasets/yasserh/housing-prices-dataset)
+
+
+[GitHub Pages](https://pages.github.com/).
 Número de registros: 545
 
 Número de columnas: 13
