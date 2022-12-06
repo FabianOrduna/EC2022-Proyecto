@@ -83,7 +83,7 @@ git clone git@github.com:FabianOrduna/EC2022-Proyecto.git
 * Cambiar al directorio del proyecto
 
 ```
-cd house (por definir)
+cd EC2022-Proyecto
 ```
 
 
