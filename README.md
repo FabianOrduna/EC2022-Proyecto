@@ -1,6 +1,7 @@
 # EC2022-Proyecto Final Housing Prices 
 
 
+![House](./Imagenes/house.png)
 
 
 ## Colaboradores
