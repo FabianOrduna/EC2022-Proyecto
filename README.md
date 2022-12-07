@@ -1,6 +1,7 @@
 # EC2022-Proyecto Final Housing Prices 
 
 
+![House](./Imagenes/house.png)
 
 
 ## Colaboradores
@@ -19,6 +20,9 @@
 Es un dataset simple se tiene la finalidad de predecir el precio de las casas basadoos en ciertos factores comoo área de la casa, número de baños, si está amueblado, o se encuentra cerca de un camino principal, etc. 
 
 El dataset es pequeño y com'lejo ya que contiene una fuerte multicolinealidad. 
+
+Puedes encontrarlo en la siguiente liga de [KAGGLE](https://www.kaggle.com/datasets/yasserh/housing-prices-dataset)
+
 
 Número de registros: 545
 
@@ -83,7 +87,7 @@ git clone git@github.com:FabianOrduna/EC2022-Proyecto.git
 * Cambiar al directorio del proyecto
 
 ```
-cd house (por definir)
+cd EC2022-Proyecto
 ```
 
 
