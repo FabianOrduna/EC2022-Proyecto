@@ -244,7 +244,7 @@ def hello_world():
     menu += "<table border=1>"
     menu += "<tr><th>Método</th><th>Endpoint</th><th>Parámetros</th><th>Cuerpo</th><th>Resultado</th></tr>"
     menu += "<tr><td>POST</td><td>/houses/train</td><td>NA</td><td>NA</td><td>Regresa que la operación ha concluido</td></tr>"
-    menu += "<tr><td>POST</td><td>/houses/test</td><td>NA</td><td>area: Área de la casa<br/>"
+    menu += "<tr><td>POST</td><td>/houses/predict</td><td>NA</td><td>area: Área de la casa<br/>"
     menu += "bedrooms: Número de cuartos<br/>"
     menu += "bathrooms: Número de baños<br/>"
     menu += "stories: Número de pisos de la casa<br/>"
