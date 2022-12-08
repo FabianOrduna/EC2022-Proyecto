@@ -12,6 +12,61 @@ library(shinyreforms)
 library(httr)
 library(jsonlite)
 
+concat_for_row <- function(id, price, area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwaterheating, airconditioning, parking, prefarea, furnishingstatus) {
+    paste0("<tr><td>",id,"</td><td>",price,"</td><td>",area,"</td><td>",bedrooms,"</td><td>",bathrooms,"</td><td>",stories,"</td><td>",mainroad,"</td><td>",guestroom,"</td><td>",basement,"</td><td>",hotwaterheating,"</td><td>",airconditioning,"</td><td>",parking,"</td><td>",prefarea,"</td><td>",furnishingstatus,"</td></tr>")
+}
+
+returnHouseHtmlFromGetResult <- function(res){
+
+    if(status_code(res) == 200){
+    
+        jsonResult <- fromJSON(content(res, "text"))
+
+        tableSkeleton1 <- "<div class=table-responsive>
+            <br/>
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                    <th>Id</th>
+                    <th>Price</th>
+                    <th>Area</th>
+                    <th>Bedrooms</th>
+                    <th>Bathrooms</th>
+                    <th>Stories</th>
+                    <th>Mainroad</th>
+                    <th>Guestroom</th>
+                    <th>Basement</th>
+                    <th>Hotwaterheating</th>
+                    <th>Airconditioning</th>
+                    <th>Parking</th>
+                    <th>Prefarea</th>
+                    <th>furnishingstatus</th>
+                    </tr>
+                </thead>
+            <tbody>"
+            rowContent <- concat_for_row(jsonResult$id, 
+                jsonResult$price,
+                jsonResult$area,
+                jsonResult$bedrooms,
+                jsonResult$bathrooms,
+                jsonResult$stories,
+                jsonResult$mainroad,
+                jsonResult$guestroom,
+                jsonResult$basement,
+                jsonResult$hotwaterheating,
+                jsonResult$airconditioning,
+                jsonResult$parking,
+                jsonResult$prefarea,
+                jsonResult$furnishingstatus)
+            tableSkeleton2 <- "</tbody></table></div>"
+        
+        return(paste0(tableSkeleton1, rowContent, tableSkeleton2))
+    }
+
+    return("<p>Casa no encontrada</p>")
+}
+
+
 # https://cran.r-project.org/web/packages/shinyreforms/vignettes/tutorial.html
 myForm <- shinyreforms::ShinyForm$new(
     "myForm",
@@ -145,10 +200,21 @@ eliminaCasaForm <- shinyreforms::ShinyForm$new(
     "eliminaCasaForm",
     submit = "Eliminar casa",
     onSuccess = function(self, input, output) {
+
+        textoResultante <- ""
+
         id <- self$getValue(input, "id_input_elimina")
 
-        output$result <- shiny::renderText({
-            paste0("Id: ", id, "</br>")
+        res <- DELETE(paste0("http://api:5000/houses/",id))
+
+        if(status_code(res)==204){
+            textoResultante <- paste0("<p>Sí se pudo eliminar la casa con id: ",id,"</p>")
+        }else{
+            textoResultante <- paste0("<p> No se pudo eliminar: ",id,"</p>")
+        }
+
+        output$eliminaresult <- shiny::renderText({
+            textoResultante
         })
     },
     onError = function(self, input, output) {
@@ -166,11 +232,11 @@ buscaCasaForm <- shinyreforms::ShinyForm$new(
     submit = "Buscar casa",
     onSuccess = function(self, input, output) {
         id <- self$getValue(input, "id_input_busca")
-
+        
         res <- GET(paste0("http://api:5000/houses/",id))
 
         output$result <- shiny::renderText({
-            content(res, "text")
+            returnHouseHtmlFromGetResult(res)
         })
     },
     onError = function(self, input, output) {
@@ -213,11 +279,6 @@ ui <- shiny::bootstrapPage(
             column(4,
                    wellPanel(
                      
-                     shiny::tags$h1("Elimina casa por id"),
-                     eliminaCasaForm$ui()
-                   ),
-                   wellPanel(
-                     
                      shiny::tags$h1("Actualiza casa por id"),
                      actualizaForm$ui()
                    )
@@ -227,7 +288,12 @@ ui <- shiny::bootstrapPage(
                      
                      shiny::tags$h1("Busca casa por id"),
                      buscaCasaForm$ui(),
-                     shiny::textOutput("result")
+                     shiny::htmlOutput("result")
+                   ),
+                   wellPanel(
+                     shiny::tags$h1("Elimina casa por id"),
+                     eliminaCasaForm$ui(),
+                     shiny::htmlOutput("eliminaresult")
                    )
             ),
 
