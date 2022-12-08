@@ -490,7 +490,7 @@ ui <- shiny::bootstrapPage(
     shinyreforms::shinyReformsPage(  # This adds a dependency on shinyreforms .css
         shiny::fluidPage(
           
-          tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00BBFF"}")),
+          tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00BBFF}")),
           fluidRow(            
             column(6,
                 wellPanel(
