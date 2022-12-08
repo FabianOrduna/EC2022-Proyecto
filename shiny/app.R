@@ -92,13 +92,13 @@ myForm <- shinyreforms::ShinyForm$new(
             bedrooms =  strtoi(bedrooms_p, base=0L),
             bathrooms =  strtoi(bathrooms_p, base=0L),
             stories =  strtoi(stories_p, base=0L),
-            mainroad = "true",#str(mainroad_p),
-            guestroom =  "true",#str(guestroom_p),
-            basement = "true",# str(basement_p),
-            hotwaterheating = "true",#str(hotwaterheating_p),
-            airconditioning = "true",#str(airconditioning_p),
+            mainroad = ifelse(mainroad_p, "yes", "no"),#str(mainroad_p),
+            guestroom =  ifelse(guestroom_p, "yes", "no"),#str(guestroom_p),
+            basement = ifelse(basement_p, "yes", "no"),# str(basement_p),
+            hotwaterheating = ifelse(hotwaterheating_p, "yes", "no"),#str(hotwaterheating_p),
+            airconditioning = ifelse(airconditioning_p, "yes", "no"),#str(airconditioning_p),
             parking =  strtoi(parking_p, base=0L),
-            prefarea = "true",# str(prefarea_p)
+            prefarea = ifelse(prefarea_p, "yes", "no"),# str(prefarea_p)
             furnishingstatus = furnishingstatus_p
         )
 
@@ -289,13 +289,13 @@ actualizaForm <- shinyreforms::ShinyForm$new(
             bedrooms =  strtoi(bedrooms_p, base=0L),
             bathrooms =  strtoi(bathrooms_p, base=0L),
             stories =  strtoi(stories_p, base=0L),
-            mainroad = "true",#str(mainroad_p),
-            guestroom =  "true",#str(guestroom_p),
-            basement = "true",# str(basement_p),
-            hotwaterheating = "true",#str(hotwaterheating_p),
-            airconditioning = "true",#str(airconditioning_p),
+            mainroad = ifelse(mainroad_p, "yes", "no"),#str(mainroad_p),
+            guestroom =  ifelse(guestroom_p, "yes", "no"),#str(guestroom_p),
+            basement = ifelse(basement_p, "yes", "no"),# str(basement_p),
+            hotwaterheating = ifelse(hotwaterheating_p, "yes", "no"),#str(hotwaterheating_p),
+            airconditioning = ifelse(airconditioning_p, "yes", "no"),#str(airconditioning_p),
             parking =  strtoi(parking_p, base=0L),
-            prefarea = "true",# str(prefarea_p)
+            prefarea = ifelse(prefarea_p, "yes", "no"),# str(prefarea_p)
             furnishingstatus = furnishingstatus_p
         )
 
