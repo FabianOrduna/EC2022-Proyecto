@@ -501,7 +501,7 @@ ui <- shiny::bootstrapPage(
             column(12,
             
                 tags$h1("House API"),
-                tags$p("Una solución para tus casas")
+                tags$p("Una solución para poder predecir el precio de casas basado en ciertos parámetros y para consultar los precios de casas anteriores.")
             
             ),
             column(12,

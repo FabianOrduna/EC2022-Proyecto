@@ -387,7 +387,7 @@ def housesPredictAPI():
     data["furnishingstatus"])]
     try:
         prediction = housesPredict(x)
-        return {"text": prediction[0]}
+        return {"Dólares $": prediction[0]}
     except:
         return {"Error": "Prediction wasn't made"}
 
