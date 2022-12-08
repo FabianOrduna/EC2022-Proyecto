@@ -72,14 +72,58 @@ myForm <- shinyreforms::ShinyForm$new(
     "myForm",
     submit = "Dar de alta",
     onSuccess = function(self, input, output) {
-        price <- self$getValue(input, "price_input")
 
-        output$result <- shiny::renderText({
-            paste0("Price: ", price, "</br>")
+        price_p <- self$getValue(input, "price_input")
+        area_p <- self$getValue(input, "area_input")
+        bedrooms_p <- self$getValue(input, "bedrooms_input")
+        bathrooms_p <- self$getValue(input, "bathrooms_input")
+        stories_p <- self$getValue(input, "stories_input")
+        mainroad_p <- self$getValue(input, "mainroad_input")
+        guestroom_p <- self$getValue(input, "guestroom_input")
+        basement_p <- self$getValue(input, "basement_input")
+        hotwaterheating_p <- self$getValue(input, "hotwaterheating_input")
+        airconditioning_p <- self$getValue(input, "airconditioning_input")
+        parking_p <- self$getValue(input, "parking_input")
+        prefarea_p <- self$getValue(input, "prefarea_input")
+        furnishingstatus_p <- self$getValue(input, "furnishingstatus_input")
+
+        listaXD <- list(
+            price =  strtoi(price_p, base=0L),
+            area =  strtoi(area_p, base=0L),
+            bedrooms =  strtoi(bedrooms_p, base=0L),
+            bathrooms =  strtoi(bathrooms_p, base=0L),
+            stories =  strtoi(stories_p, base=0L),
+            mainroad = "true",#str(mainroad_p),
+            guestroom =  "true",#str(guestroom_p),
+            basement = "true",# str(basement_p),
+            hotwaterheating = "true",#str(hotwaterheating_p),
+            airconditioning = "true",#str(airconditioning_p),
+            parking =  strtoi(parking_p, base=0L),
+            prefarea = "true",# str(prefarea_p)
+            furnishingstatus = furnishingstatus_p
+        )
+
+        json_body <- jsonlite::toJSON(
+            listaXD
+        , auto_unbox = TRUE)
+
+        #textoResultante <- json_body
+
+        res <- POST("http://api:5000/houses", body = listaXD, encode="form")
+
+        if(status_code(res)==201){
+           textoResultante <- paste0("<p>Sí se pudo crear la casa",content(res,"text"),"</p>")
+        }else{
+           textoResultante <- "hubo un error"
+        }
+
+
+        output$resultalta <- shiny::renderText({
+            textoResultante
         })
     },
     onError = function(self, input, output) {
-        output$result <- shiny::renderText({
+        output$resultalta <- shiny::renderText({
             "Form is invalid!"
         })
     },
@@ -134,14 +178,15 @@ actualizaForm <- shinyreforms::ShinyForm$new(
     "actualizaForm",
     submit = "Actualiza una casa",
     onSuccess = function(self, input, output) {
-        price <- self$getValue(input, "price_input_actualiza")
+        
+        
 
-        output$result <- shiny::renderText({
-            paste0("Price: ", price, "</br>")
+        output$resultactualiza <- shiny::renderText({
+            "intentas actualizar una casa"
         })
     },
     onError = function(self, input, output) {
-        output$result <- shiny::renderText({
+        output$resultactualiza <- shiny::renderText({
             "Form is invalid!"
         })
     },
@@ -271,8 +316,9 @@ ui <- shiny::bootstrapPage(
             column(4,
                    wellPanel(
                      
-                     shiny::tags$h1("Alta de casa"),
-                     myForm$ui(),
+                    shiny::tags$h1("Alta de casa"),
+                    myForm$ui(),
+                    shiny::htmlOutput("resultalta")
                      
                    )
             ),
@@ -280,7 +326,8 @@ ui <- shiny::bootstrapPage(
                    wellPanel(
                      
                      shiny::tags$h1("Actualiza casa por id"),
-                     actualizaForm$ui()
+                     actualizaForm$ui(),
+                    shiny::htmlOutput("resultactualiza")
                    )
             ),
             column(4,
