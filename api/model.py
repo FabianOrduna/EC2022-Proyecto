@@ -6,10 +6,20 @@ from sklearn.model_selection import train_test_split
 
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-from joblib import dump, load
+# from joblib import dump, load
 import re
+import pickle
 
-def update_model(conn):
+import psycopg2
+import json
+import os
+
+# current_directory = os.getcwd()
+# os.chdir(current_directory+"/api")
+# print(current_directory)
+
+
+def housesTrain(conn):
     df = pd.read_sql("select * from house", conn)
     df = df.drop(columns='id')
     target = 'price'
@@ -64,6 +74,7 @@ def update_model(conn):
     for i in df.columns.values:
         m.append(i.replace(' ','_'))
 
+    df.head
     df.columns = m
     X = df.drop([target],axis=1)
     print(X.columns)
@@ -71,11 +82,12 @@ def update_model(conn):
     Train_X, Test_X, Train_Y, Test_Y = train_test_split(X, Y, train_size=0.8, test_size=0.2, random_state=100)
     Train_X.reset_index(drop=True,inplace=True)
     MLR = LinearRegression().fit(Train_X,Train_Y)
-    #dump(MLR, "./model/new_model.joblib")
+    # joblib.dump(MLR, "model/new_model.joblib")
+    pickle.dump(MLR, open('new_model.pickle', 'wb'))
 
 
 
-def predict_model(x):
+def housesPredict(x):
     df = pd.DataFrame(x, columns = ['area', 'bedrooms', 'bathrooms', 'stories', 'mainroad',
        'guestroom', 'basement', 'hotwaterheating', 'airconditioning',
        'parking', 'prefarea', 'furnishingstatus'])
@@ -108,38 +120,7 @@ def predict_model(x):
         df_try[column] = np.where(df_try[column] == "yes", 1, 0)
     print(df_try.columns)
     # Carga el modelo
-    #MLR = load("./model/new_model.joblib")
-    #prediction = MLR.predict(df_try)
-    #return(prediction)
-    return (10)
-
-# Test
-
-db_name = 'postgres'
-db_user = 'postgres'
-db_pass = 'postgres'
-db_host = 'db'
-db_port = '5432'
-db_schema = 'public'
-
-def getConnectionCursorInternal():
-    connection = None
-    cursor = None
-    try:
-        connection = psycopg2.connect(user=db_user,
-                                    password= db_pass,
-                                    host=db_host,
-                                    port=db_port,
-                                    database=db_name)
-        cursor = connection.cursor()
-        
-    except (Exception, psycopg2.Error) as error:
-        print("Error while stablishing connection")
-    
-    return connection, cursor
-
-con, cursor = getConnectionCursorInternal()
-
-update_model(con)
-houses = [(7420, 4, 2, 3, 'yes', 'no', 'no', 'no', 'yes', 2, 'yes', 'furnished')]
-predict_model(houses)
+    # MLR = load("model/new_model.joblib")
+    MLR = pickle.load(open('new_model.pickle', 'rb'))
+    prediction = MLR.predict(df_try)
+    prediction

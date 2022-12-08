@@ -9,7 +9,7 @@
 | Nombre                     | Clave   |
 | -------------------------- | ------- |
 | Fabián Orduña Ferreira.    | 159001  |
-| José Avilla Nueva López    | 209776  |
+| Andres Villanueva López    | 209776  |
 | Juan Carlos Soto Hernández | 82616   |
 
 
