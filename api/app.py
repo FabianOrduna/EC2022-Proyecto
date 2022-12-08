@@ -42,6 +42,25 @@ def getHouses():
         print("Selecting rows from mobile table using cursor.fetchall")
         houses = cursor.fetchall()        
 
+        tmp = [ {'id':id,
+        'price':price,
+        'area':area,
+        'bedrooms':bedrooms,
+        'bathrooms':bathrooms,
+        'stories':stories,
+        'mainroad':mainroad,
+        'guestroom':guestroom,
+        'basement':basement,
+        'hotwaterheating':hotwaterheating,
+        'airconditioning':airconditioning,
+        'parking':parking,
+        'prefarea':prefarea,
+        'furnishingstatus':furnishingstatus
+        } for id, price, area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwaterheating, airconditioning, parking, prefarea, furnishingstatus  in houses ]      
+
+        houses = tmp    
+
+
     except (Exception, psycopg2.Error) as error:
         print("Error while fetching data from PostgreSQL")
 
