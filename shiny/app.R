@@ -9,6 +9,8 @@
 
 library(shiny)
 library(shinyreforms)
+library(httr)
+library(jsonlite)
 
 # https://cran.r-project.org/web/packages/shinyreforms/vignettes/tutorial.html
 myForm <- shinyreforms::ShinyForm$new(
@@ -77,7 +79,7 @@ actualizaForm <- shinyreforms::ShinyForm$new(
     "actualizaForm",
     submit = "Actualiza una casa",
     onSuccess = function(self, input, output) {
-        price <- self$getValue(input, "price_input")
+        price <- self$getValue(input, "price_input_actualiza")
 
         output$result <- shiny::renderText({
             paste0("Price: ", price, "</br>")
@@ -89,49 +91,49 @@ actualizaForm <- shinyreforms::ShinyForm$new(
         })
     },
     shinyreforms::validatedInput(
-        shiny::textInput("id_input", label = "Id")
+        shiny::textInput("id_input_actualiza", label = "Id")
     ),
     shinyreforms::validatedInput(
-        shiny::textInput("price_input", label = "Price")
+        shiny::textInput("price_input_actualiza", label = "Price")
     ),
     shinyreforms::validatedInput(
-        shiny::textInput("area_input", label = "Area")
+        shiny::textInput("area_input_actualiza", label = "Area")
     ),
     shinyreforms::validatedInput(
-        shiny::textInput("bedrooms_input", label = "Bedrooms")
+        shiny::textInput("bedrooms_input_actualiza", label = "Bedrooms")
     ),
     shinyreforms::validatedInput(
-        shiny::textInput("bathrooms_input", label = "Bathrooms")
+        shiny::textInput("bathrooms_input_actualiza", label = "Bathrooms")
     ),
     shinyreforms::validatedInput(
-        shiny::textInput("stories_input", label = "Stories")
+        shiny::textInput("stories_input_actualiza", label = "Stories")
     ),
     shinyreforms::validatedInput(
-        shiny::checkboxInput("mainroad_input", label = "Mainroad")
+        shiny::checkboxInput("mainroad_input_actualiza", label = "Mainroad")
     ),
     shinyreforms::validatedInput(
-        shiny::checkboxInput("guestroom_input", label = "Guestroom")
+        shiny::checkboxInput("guestroom_input_actualiza", label = "Guestroom")
     ),
     shinyreforms::validatedInput(
-        shiny::checkboxInput("basement_input", label = "Basement")
+        shiny::checkboxInput("basement_input_actualiza", label = "Basement")
     ),
     shinyreforms::validatedInput(
-        shiny::checkboxInput("hotwaterheating_input", label = "Hotwaterheating")
+        shiny::checkboxInput("hotwaterheating_input_actualiza", label = "Hotwaterheating")
     ),
     shinyreforms::validatedInput(
-        shiny::checkboxInput("airconditioning_input", label = "Airconditioning")
+        shiny::checkboxInput("airconditioning_input_actualiza", label = "Airconditioning")
     ),
     shinyreforms::validatedInput(
-        shiny::textInput("parking_input", label = "Parking")
+        shiny::textInput("parking_input_actualiza", label = "Parking")
     ),
     shinyreforms::validatedInput(
-        shiny::checkboxInput("prefarea_input", label = "Prefarea")
+        shiny::checkboxInput("prefarea_input_actualiza", label = "Prefarea")
     ),
     shinyreforms::validatedInput(
         #shiny::textInput("furnishingstatus_input", label = "FurnishingStatus")
         #  furnished | semi-furnished | unfurnished
 
-        shiny::selectInput("furnishingstatus_input", "FurnishingStatus:",
+        shiny::selectInput("furnishingstatus_input_actualiza", "FurnishingStatus:",
                 c("furnished" = "furnished",
                   "semi-furnished" = "semi-furnished",
                   "unfurnished" = "unfurnished")),
@@ -143,7 +145,7 @@ eliminaCasaForm <- shinyreforms::ShinyForm$new(
     "eliminaCasaForm",
     submit = "Eliminar casa",
     onSuccess = function(self, input, output) {
-        id <- self$getValue(input, "id_input")
+        id <- self$getValue(input, "id_input_elimina")
 
         output$result <- shiny::renderText({
             paste0("Id: ", id, "</br>")
@@ -154,19 +156,21 @@ eliminaCasaForm <- shinyreforms::ShinyForm$new(
             "Form is invalid!"
         })
     },
-    shinyreforms::validatedInput(
-        shiny::textInput("id_input", label = "Id")
-    )
+    
+    shiny::textInput("id_input_elimina", label = "Id")
+    
 )
 
 buscaCasaForm <- shinyreforms::ShinyForm$new(
     "buscaCasaForm",
     submit = "Buscar casa",
     onSuccess = function(self, input, output) {
-        id <- self$getValue(input, "id_input")
+        id <- self$getValue(input, "id_input_busca")
+
+        res <- GET(paste0("http://api:5000/houses/",id))
 
         output$result <- shiny::renderText({
-            paste0("Id: ", id, "</br>")
+            content(res, "text")
         })
     },
     onError = function(self, input, output) {
@@ -174,9 +178,7 @@ buscaCasaForm <- shinyreforms::ShinyForm$new(
             "Form is invalid!"
         })
     },
-    shinyreforms::validatedInput(
-        shiny::textInput("id_input", label = "Id")
-    )
+    shiny::textInput("id_input_busca", label = "Id")
 )
 
 
@@ -184,6 +186,7 @@ server <- function(input, output, session) {
     myForm$server(input, output)
     eliminaCasaForm$server(input,output)
     actualizaForm$server(input,output)
+    buscaCasaForm$server(input,output)
     # More server logic
 }
 
@@ -204,7 +207,7 @@ ui <- shiny::bootstrapPage(
                      
                      shiny::tags$h1("Alta de casa"),
                      myForm$ui(),
-                     shiny::textOutput("result")
+                     
                    )
             ),
             column(4,
@@ -223,7 +226,8 @@ ui <- shiny::bootstrapPage(
                    wellPanel(
                      
                      shiny::tags$h1("Busca casa por id"),
-                     buscaCasaForm$ui()
+                     buscaCasaForm$ui(),
+                     shiny::textOutput("result")
                    )
             ),
 
