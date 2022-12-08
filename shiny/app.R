@@ -333,21 +333,12 @@ server <- function(input, output, session) {
     actualizaForm$server(input,output)
     buscaCasaForm$server(input,output)
     
-    
-    #res <- GET("http://localhost:5000/houses")
-    #jsonResult <- fromJSON(content(res, "text"))
-    #prices <- jsonResult$price
-    output$lectura <- shiny::renderText({
-      "tio"
-    })
-    
     output$distPlot <- renderPlot({
 
       res <- GET("http://api:5000/houses")
       jsonResult <- fromJSON(content(res, "text"))
       prices <- jsonResult$price
       
-    #x    <- faithful$waiting
       x <- prices
     bins <- seq(min(x), max(x), length.out = input$bins + 1)
 
@@ -356,7 +347,6 @@ server <- function(input, output, session) {
          main = "Histograma de precios")
 
     })
-    # More server logic
 }
 
 
@@ -377,8 +367,7 @@ ui <- shiny::bootstrapPage(
                   label = "Total de particiones:",
                   min = 1,
                   max = 60,
-                  value = 30),
-                     shiny::htmlOutput("lectura")
+                  value = 30)
                 )
             ),
             column(6,
