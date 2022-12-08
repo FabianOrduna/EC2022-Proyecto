@@ -497,7 +497,21 @@ ui <- shiny::bootstrapPage(
         shiny::fluidPage(
           
           tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00BBFF}")),
-          fluidRow(            
+          fluidRow(
+            column(12,
+            
+                tags$h1("House API"),
+                tags$p("Una solución para tus casas")
+            
+            ),
+            column(12,
+                     titlePanel("Busca en el dataset houses"),
+
+                     mainPanel(
+                     dataTableOutput("houses")    
+                    
+                )
+            ),  
             column(6,
                 wellPanel(
                     plotOutput(outputId = "distPlot"),
@@ -506,7 +520,7 @@ ui <- shiny::bootstrapPage(
                   min = 1,
                   max = 60,
                   value = 30)
-                )
+                ),
             ),
             column(6,
                 wellPanel(
@@ -514,23 +528,7 @@ ui <- shiny::bootstrapPage(
                     verbatimTextOutput("info")                                        
                 )
             ),
-            column(6,
-                wellPanel(
-                    
-                     titlePanel("Busca en el dataset houses"),
-
-                     mainPanel(
-                     dataTableOutput("houses")    
-                    )
-                    
-                )
-            ),
-            column(6,
-                wellPanel(
-                    
-                )
-            ),
-             column(12,
+            column(12,
             column(4,
                    wellPanel(
                      
