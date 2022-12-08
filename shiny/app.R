@@ -518,50 +518,59 @@ ui <- shiny::bootstrapPage(
                     
                 )
             ),
-            column(4,
-                   wellPanel(
-                     
-                    shiny::tags$h1("Alta de casa"),
-                    myForm$ui(),
-                    shiny::htmlOutput("resultalta")
-                     
-                   )
-            ),
-            column(4,
-                   wellPanel(
-                     
-                     shiny::tags$h1("Actualiza casa por id"),
-                     actualizaForm$ui(),
-                    shiny::htmlOutput("resultactualiza")
-                   )
-            ),
-            column(4,
-                   wellPanel(
-                     
-                    shiny::tags$h1("Predice precio de casa"),
-                    prediceForm$ui(),
-                    shiny::htmlOutput("resultpredice")
-                     
-                   )
-            ),
+             column(12,
             column(4,
                    wellPanel(
                      
                      shiny::tags$h1("Busca casa por id"),
                      buscaCasaForm$ui(),
                      shiny::htmlOutput("result")
-                   ),
+                   )
+            ),
+            column(4,
                    wellPanel(
                      shiny::tags$h1("Elimina casa por id"),
                      eliminaCasaForm$ui(),
                      shiny::htmlOutput("eliminaresult")
-                   ),
+                   )
+            ),
+            column(4,
                    wellPanel(
                      shiny::tags$h1("Entrena modelo de casas"),
                      entrenaModeloForm$ui(),
                      shiny::htmlOutput("entrenaresult")
                    )
             ),
+            
+            column(12,
+                column(4,
+                        wellPanel(
+                            
+                        shiny::tags$h1("Alta de casa"),
+                        myForm$ui(),
+                        shiny::htmlOutput("resultalta")
+                            
+                        )
+                ),
+                column(4,
+                        wellPanel(
+                            
+                            shiny::tags$h1("Actualiza casa por id"),
+                            actualizaForm$ui(),
+                        shiny::htmlOutput("resultactualiza")
+                        )
+                ),
+                column(4,
+                        wellPanel(
+                            
+                        shiny::tags$h1("Predice precio de casa"),
+                        prediceForm$ui(),
+                        shiny::htmlOutput("resultpredice")
+                            
+                        )
+                )
+            )
+            )
           )
         )
     )
