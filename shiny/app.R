@@ -172,10 +172,51 @@ actualizaForm <- shinyreforms::ShinyForm$new(
     submit = "Actualiza una casa",
     onSuccess = function(self, input, output) {
         
+        id_p <- self$getValue(input, "id_input_actualiza")
+        price_p <- self$getValue(input, "price_input_actualiza")
+        area_p <- self$getValue(input, "area_input_actualiza")
+        bedrooms_p <- self$getValue(input, "bedrooms_input_actualiza")
+        bathrooms_p <- self$getValue(input, "bathrooms_input_actualiza")
+        stories_p <- self$getValue(input, "stories_input_actualiza")
+        mainroad_p <- self$getValue(input, "mainroad_input_actualiza")
+        guestroom_p <- self$getValue(input, "guestroom_input_actualiza")
+        basement_p <- self$getValue(input, "basement_input_actualiza")
+        hotwaterheating_p <- self$getValue(input, "hotwaterheating_input_actualiza")
+        airconditioning_p <- self$getValue(input, "airconditioning_input_actualiza")
+        parking_p <- self$getValue(input, "parking_input_actualiza")
+        prefarea_p <- self$getValue(input, "prefarea_input_actualiza")
+        furnishingstatus_p <- self$getValue(input, "furnishingstatus_input_actualiza")
+
+        listaParams <- list(
+            id = strtoi(id_p, base=0L),
+            price =  strtoi(price_p, base=0L),
+            area =  strtoi(area_p, base=0L),
+            bedrooms =  strtoi(bedrooms_p, base=0L),
+            bathrooms =  strtoi(bathrooms_p, base=0L),
+            stories =  strtoi(stories_p, base=0L),
+            mainroad = "true",#str(mainroad_p),
+            guestroom =  "true",#str(guestroom_p),
+            basement = "true",# str(basement_p),
+            hotwaterheating = "true",#str(hotwaterheating_p),
+            airconditioning = "true",#str(airconditioning_p),
+            parking =  strtoi(parking_p, base=0L),
+            prefarea = "true",# str(prefarea_p)
+            furnishingstatus = furnishingstatus_p
+        )
+
+        
+        res <- PUT(paste0("http://api:5000/houses/",id_p), body = listaParams, encode="form")
+
+        if(status_code(res)==200){
+           textoResultante <- paste0("<p>Sí se pudo actualizar la casa",content(res,"text"),"</p>")
+        }else{
+           textoResultante <- "hubo un error"
+        }
+        
         
 
         output$resultactualiza <- shiny::renderText({
-            "intentas actualizar una casa"
+            textoResultante
         })
     },
     onError = function(self, input, output) {
