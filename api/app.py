@@ -1,6 +1,7 @@
 import psycopg2
 from flask import Flask, make_response, request
 import json
+from model import update_model
 
 app = Flask(__name__)
 
@@ -13,6 +14,7 @@ db_schema = 'public'
 
 def getConnectionCursor():
     connection = None
+    cursor = None
     try:
         connection = psycopg2.connect(user=db_user,
                                     password= db_pass,
@@ -319,6 +321,20 @@ def houseDelete(id):
         response = make_response(json.dumps([]), 404)                                           
         response.headers['Content-Type'] = 'application/json; charset=utf-8'            
         return response
- 
+
+# UPDATE MODEL
+@app.route("/update_model", methods=['POST'])
+def update_model_api():
+    con, cursor = getConnectionCursor()
+    update_model(con)
+    return True
+
+# EVAL MODEL
+@app.route("/predict_model", methods=['POST'])
+def predict_model_api(json):
+    con, cursor = getConnectionCursor()
+    predict_model(con)
+    return True
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0') # This statement starts the server on your local machine.
