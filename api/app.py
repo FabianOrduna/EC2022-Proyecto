@@ -42,6 +42,25 @@ def getHouses():
         print("Selecting rows from mobile table using cursor.fetchall")
         houses = cursor.fetchall()        
 
+        tmp = [ {'id':id,
+        'price':price,
+        'area':area,
+        'bedrooms':bedrooms,
+        'bathrooms':bathrooms,
+        'stories':stories,
+        'mainroad':mainroad,
+        'guestroom':guestroom,
+        'basement':basement,
+        'hotwaterheating':hotwaterheating,
+        'airconditioning':airconditioning,
+        'parking':parking,
+        'prefarea':prefarea,
+        'furnishingstatus':furnishingstatus
+        } for id, price, area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwaterheating, airconditioning, parking, prefarea, furnishingstatus  in houses ]      
+
+        houses = tmp    
+
+
     except (Exception, psycopg2.Error) as error:
         print("Error while fetching data from PostgreSQL")
 
@@ -66,7 +85,25 @@ def getAHouse(id):
 
         cursor.execute(query)
         print("Selecting rows from mobile table using cursor.fetchall")
-        houses = cursor.fetchall()        
+        houses = cursor.fetchall()
+
+        tmp = [ {'id':id,
+        'price':price,
+        'area':area,
+        'bedrooms':bedrooms,
+        'bathrooms':bathrooms,
+        'stories':stories,
+        'mainroad':mainroad,
+        'guestroom':guestroom,
+        'basement':basement,
+        'hotwaterheating':hotwaterheating,
+        'airconditioning':airconditioning,
+        'parking':parking,
+        'prefarea':prefarea,
+        'furnishingstatus':furnishingstatus
+        } for id, price, area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, hotwaterheating, airconditioning, parking, prefarea, furnishingstatus  in houses ]      
+
+        houses = tmp
 
     except (Exception, psycopg2.Error) as error:
         print("Error while fetching data from PostgreSQL")
@@ -207,7 +244,7 @@ def hello_world():
     menu += "<table border=1>"
     menu += "<tr><th>Método</th><th>Endpoint</th><th>Parámetros</th><th>Cuerpo</th><th>Resultado</th></tr>"
     menu += "<tr><td>POST</td><td>/houses/train</td><td>NA</td><td>NA</td><td>Regresa que la operación ha concluido</td></tr>"
-    menu += "<tr><td>POST</td><td>/houses/test</td><td>NA</td><td>area: Área de la casa<br/>"
+    menu += "<tr><td>POST</td><td>/houses/predict</td><td>NA</td><td>area: Área de la casa<br/>"
     menu += "bedrooms: Número de cuartos<br/>"
     menu += "bathrooms: Número de baños<br/>"
     menu += "stories: Número de pisos de la casa<br/>"
@@ -299,7 +336,7 @@ def houseUpdate(id):
 
     if totalUpdates == 1:
         house = getAHouse(id)
-        response = make_response(json.dumps(house),201)
+        response = make_response(json.dumps(house),200)
         response.headers['Content-Type'] = 'application/json; charset=utf-8'            
         return response
     else:

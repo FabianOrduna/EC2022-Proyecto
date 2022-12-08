@@ -14,6 +14,8 @@ RUN R -e 'install.packages(c(\
               "shiny", \
               "shinyreforms", \
               "shinydashboard", \
+              "httr", \
+              "jsonlite", \
               "ggplot2" \
             ), \
             repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2021-04-23"\
