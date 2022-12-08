@@ -66,7 +66,6 @@ returnHouseHtmlFromGetResult <- function(res){
     return("<p>Casa no encontrada</p>")
 }
 
-
 # https://cran.r-project.org/web/packages/shinyreforms/vignettes/tutorial.html
 myForm <- shinyreforms::ShinyForm$new(
     "myForm",
@@ -87,7 +86,7 @@ myForm <- shinyreforms::ShinyForm$new(
         prefarea_p <- self$getValue(input, "prefarea_input")
         furnishingstatus_p <- self$getValue(input, "furnishingstatus_input")
 
-        listaXD <- list(
+        listaParams <- list(
             price =  strtoi(price_p, base=0L),
             area =  strtoi(area_p, base=0L),
             bedrooms =  strtoi(bedrooms_p, base=0L),
@@ -103,13 +102,7 @@ myForm <- shinyreforms::ShinyForm$new(
             furnishingstatus = furnishingstatus_p
         )
 
-        json_body <- jsonlite::toJSON(
-            listaXD
-        , auto_unbox = TRUE)
-
-        #textoResultante <- json_body
-
-        res <- POST("http://api:5000/houses", body = listaXD, encode="form")
+        res <- POST("http://api:5000/houses", body = listaParams, encode="form")
 
         if(status_code(res)==201){
            textoResultante <- paste0("<p>Sí se pudo crear la casa",content(res,"text"),"</p>")
