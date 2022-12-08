@@ -478,6 +478,12 @@ server <- function(input, output, session) {
          })
 
     })
+
+    output$houses = renderDataTable({
+        res <- GET("http://api:5000/houses")
+         jsonResult <- fromJSON(content(res, "text"))
+        jsonResult
+    })    
     
 }
 
@@ -510,6 +516,12 @@ ui <- shiny::bootstrapPage(
             ),
             column(6,
                 wellPanel(
+                    
+                     titlePanel("Busca en el dataset houses"),
+
+                     mainPanel(
+                     dataTableOutput("houses")    
+                    )
                     
                 )
             ),
