@@ -457,11 +457,28 @@ server <- function(input, output, session) {
       x <- prices
     bins <- seq(min(x), max(x), length.out = input$bins + 1)
 
-    hist(x, breaks = bins, col = "#FF8C00", border = "white",
+    hist(x, breaks = bins, col = "#00BBFF", border = "white",
          xlab = "Precios de las casas (en dólares)",
          main = "Histograma de precios")
 
     })
+    
+    output$plot1 <- renderPlot({
+    
+      res <- GET("http://api:5000/houses")
+      jsonResult <- fromJSON(content(res, "text"))
+
+    plot(jsonResult$bedroom, jsonResult$price, col = "#08D1A2",
+         xlab = "Número de cuartos",
+         ylab = "Precio de las casa (dólares)",
+         main = "Precio casa vs Número de cuartos")
+
+    output$info <- renderText({
+    paste0("Num de cuartos=", input$plot_click$x, "\nPrecio de la casa=", input$plot_click$y)
+         })
+
+    })
+    
 }
 
 
@@ -473,7 +490,7 @@ ui <- shiny::bootstrapPage(
     shinyreforms::shinyReformsPage(  # This adds a dependency on shinyreforms .css
         shiny::fluidPage(
           
-          tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #FF8C00}")),
+          tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00BBFF}")),
           fluidRow(            
             column(6,
                 wellPanel(
@@ -487,7 +504,8 @@ ui <- shiny::bootstrapPage(
             ),
             column(6,
                 wellPanel(
-                    
+                    plotOutput("plot1", click = "plot_click"),
+                    verbatimTextOutput("info")                                        
                 )
             ),
             column(6,

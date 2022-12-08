@@ -102,3 +102,22 @@ docker-compose build
 ```
 docker-compose up
 ```
+
+# HOUSES API
+
+| Método   | Endpoint  | Parámetro                   | Cuerpo                          | Resultado                          | 
+| -------- | --------- | --------------------------- | ------------------------------- | ---------------------------------- |
+| Post     | houses    | NA                          | Price. Variable a predecir <br /> Área. Área de la casa   <br />  Bedrooms. Número de cuartos <br /> Bathrooms. Número de baños <br /> Stories. Número de pisos de la casa  <br />  Mainroad. Si está conectada a un camino principal <br /> Gestroom. Si tiene cuarto de invitados  <br /> Basement. Si tiene zótano <br /> Hotwaterheating. Si tiene calentador de agua <br /> Parking. Número de lugares de estacionamiento <br /> Prefarea. ¿Está en un área preferente? <br /> Furnishingstatus. Es estatus de amueblado | Regresa el objeto creado con su id |
+|  GET        |    /houses         |          NA                   | NA          | Regresa lista de casas  |
+|  GET        |    /houses/id        |         id: el identificador de la casa a buscar                  | NA          | Regresa una casa  |
+| PUT       |    /houses/id        |         id: el identificador de la casa a actualiar                  | Price. Variable a predecir <br /> Área. Área de la casa   <br />  Bedrooms. Número de cuartos <br /> Bathrooms. Número de baños <br /> Stories. Número de pisos de la casa  <br />  Mainroad. Si está conectada a un camino principal <br /> Gestroom. Si tiene cuarto de invitados  <br /> Basement. Si tiene zótano <br /> Hotwaterheating. Si tiene calentador de agua <br /> Parking. Número de lugares de estacionamiento <br /> Prefarea. ¿Está en un área preferente? <br /> Furnishingstatus. Es estatus de amueblado | Regresa el objeto creado con su id         | Regresa el registro actiualizado |
+|  DELETE      |  /houses/id          |  id: el identificador de la casa a borrar                  | NA          | Regresa vacio  |
+
+Además, puedes re-emteenar un medelo de predicción de precios con base en los datos que se encuentren en la base.
+
+
+| Método   | Endpoint  | Parámetro                   | Cuerpo                          | Resultado                          | 
+| -------- | --------- | --------------------------- | ------------------------------- | ---------------------------------- |
+| POST | /houses/train | NA |Price. Variable a predecir <br /> Área. Área de la casa   <br />  Bedrooms. Número de cuartos <br /> Bathrooms. Número de baños <br /> Stories. Número de pisos de la casa  <br />  Mainroad. Si está conectada a un camino principal <br /> Gestroom. Si tiene cuarto de invitados  <br /> Basement. Si tiene zótano <br /> Hotwaterheating. Si tiene calentador de agua <br /> Parking. Número de lugares de estacionamiento <br /> Prefarea. ¿Está en un área preferente? <br /> Furnishingstatus. Es estatus de amueblado |  Regresa "la operación ha concluido" |
+
+
