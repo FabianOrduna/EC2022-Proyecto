@@ -462,6 +462,23 @@ server <- function(input, output, session) {
          main = "Histograma de precios")
 
     })
+    
+    output$plot1 <- renderPlot({
+    
+      res <- GET("http://api:5000/houses")
+      jsonResult <- fromJSON(content(res, "text"))
+
+    plot(jsonResult$bedroom, jsonResult$price, col = "#08D1A2",
+         xlab = "Número de cuartos",
+         ylab = "Precio de las casa (dólares)",
+         main = "Precio casa vs Número de cuartos")
+
+    output$info <- renderText({
+    paste0("Num de cuartos=", input$plot_click$x, "\nPrecio de la casa=", input$plot_click$y)
+         })
+
+    })
+    
 }
 
 
@@ -487,7 +504,8 @@ ui <- shiny::bootstrapPage(
             ),
             column(6,
                 wellPanel(
-                    
+                    plotOutput("plot1", click = "plot_click"),
+                    verbatimTextOutput("info")                                        
                 )
             ),
             column(6,
