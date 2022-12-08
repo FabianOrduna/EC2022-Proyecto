@@ -375,6 +375,16 @@ ui <- shiny::bootstrapPage(
                     
                 )
             ),
+            column(6,
+                wellPanel(
+                    
+                )
+            ),
+            column(6,
+                wellPanel(
+                    
+                )
+            ),
             column(4,
                    wellPanel(
                      
