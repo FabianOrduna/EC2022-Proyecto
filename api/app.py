@@ -1,5 +1,5 @@
 import psycopg2
-from flask import Flask, make_response, request
+from flask import Flask, make_response, request, jsonify
 import json
 from model import housesTrain, housesPredict
 
@@ -361,18 +361,37 @@ def houseDelete(id):
 
 # UPDATE MODEL
 @app.route("/houses/train", methods=['POST'])
-def housesTrain():
-    con, cursor = getConnectionCursor()
-    housesTrain(con)
-    return True
+def housesTrainAPI():
+    try:
+        con, cursor = getConnectionCursor()
+        housesTrain(con)
+        return jsonify({"trained": True})
+    except:
+        return jsonify({"trained": False})
 
 # EVAL MODEL
 @app.route("/houses/predict", methods=['POST'])
-def housesPredict(json):
-    con, cursor = getConnectionCursor()
-    housesPredict(con)
-    return(prediction)
+def housesPredictAPI():
+    data = request.form
+    x = [(int(data["area"]),
+    int(data["bedrooms"]),
+    int(data["bathrooms"]),
+    int(data["stories"]),
+    data["mainroad"],
+    data["guestroom"],
+    data["basement"],
+    data["hotwaterheating"],
+    data["airconditioning"],
+    int(data["parking"]),
+    data["prefarea"],
+    data["furnishingstatus"])]
+    try:
+        prediction = housesPredict(x)
+        return {"text": prediction[0]}
+    except:
+        return {"Error": "Prediction wasn't made"}
 
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0') # This statement starts the server on your local machine.
+

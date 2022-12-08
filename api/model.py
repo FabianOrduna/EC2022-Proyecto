@@ -13,6 +13,7 @@ import pickle
 import psycopg2
 import json
 import os
+# import warnings
 
 # current_directory = os.getcwd()
 # os.chdir(current_directory+"/api")
@@ -91,7 +92,6 @@ def housesPredict(x):
     df = pd.DataFrame(x, columns = ['area', 'bedrooms', 'bathrooms', 'stories', 'mainroad',
        'guestroom', 'basement', 'hotwaterheating', 'airconditioning',
        'parking', 'prefarea', 'furnishingstatus'])
-    
     # Necesitas preprocesar los datos como arriba
     target = 'price'
     features = [i for i in df.columns if i not in [target]]
@@ -118,9 +118,10 @@ def housesPredict(x):
         df_try = df_try.drop(labels = feat, axis = 1)
     for column in yes_no_columns:
         df_try[column] = np.where(df_try[column] == "yes", 1, 0)
-    print(df_try.columns)
     # Carga el modelo
     # MLR = load("model/new_model.joblib")
+    # warnings.warn("Hola")
     MLR = pickle.load(open('new_model.pickle', 'rb'))
+    # warnings.warn("Adios")
     prediction = MLR.predict(df_try)
-    prediction
+    return prediction
