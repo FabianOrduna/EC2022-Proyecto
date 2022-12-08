@@ -13,7 +13,7 @@ import pickle
 import psycopg2
 import json
 import os
-import warnings
+# import warnings
 
 # current_directory = os.getcwd()
 # os.chdir(current_directory+"/api")
