@@ -167,6 +167,101 @@ myForm <- shinyreforms::ShinyForm$new(
     )
 )
 
+prediceForm <- shinyreforms::ShinyForm$new(
+    "prediceForm",
+    submit = "Predecir",
+    onSuccess = function(self, input, output) {
+
+        area_p <- self$getValue(input, "area_input_predice")
+        bedrooms_p <- self$getValue(input, "bedrooms_input_predice")
+        bathrooms_p <- self$getValue(input, "bathrooms_input_predice")
+        stories_p <- self$getValue(input, "stories_input_predice")
+        mainroad_p <- self$getValue(input, "mainroad_input_predice")
+        guestroom_p <- self$getValue(input, "guestroom_input_predice")
+        basement_p <- self$getValue(input, "basement_input_predice")
+        hotwaterheating_p <- self$getValue(input, "hotwaterheating_input_predice")
+        airconditioning_p <- self$getValue(input, "airconditioning_input_predice")
+        parking_p <- self$getValue(input, "parking_input_predice")
+        prefarea_p <- self$getValue(input, "prefarea_input_predice")
+        furnishingstatus_p <- self$getValue(input, "furnishingstatus_input_predice")
+
+        listaParams <- list(
+            area =  strtoi(area_p, base=0L),
+            bedrooms =  strtoi(bedrooms_p, base=0L),
+            bathrooms =  strtoi(bathrooms_p, base=0L),
+            stories =  strtoi(stories_p, base=0L),
+            mainroad = "true",#str(mainroad_p),
+            guestroom =  "true",#str(guestroom_p),
+            basement = "true",# str(basement_p),
+            hotwaterheating = "true",#str(hotwaterheating_p),
+            airconditioning = "true",#str(airconditioning_p),
+            parking =  strtoi(parking_p, base=0L),
+            prefarea = "true",# str(prefarea_p)
+            furnishingstatus = furnishingstatus_p
+        )
+
+        res <- POST("http://api:5000/houses/predict", body = listaParams, encode="form")
+
+        if(status_code(res)==200){
+           textoResultante <- paste0("<p>Se piensa que la casa debe costar: ",content(res,"text"),"</p>")
+        }else{
+           textoResultante <- "hubo un error"
+        }
+
+
+        output$resultpredice <- shiny::renderText({
+            textoResultante
+        })
+    },
+    onError = function(self, input, output) {
+        output$resultpredice <- shiny::renderText({
+            "Form is invalid!"
+        })
+    },
+    shinyreforms::validatedInput(
+        shiny::textInput("area_input_predice", label = "Area")
+    ),
+    shinyreforms::validatedInput(
+        shiny::textInput("bedrooms_input_predice", label = "Bedrooms")
+    ),
+    shinyreforms::validatedInput(
+        shiny::textInput("bathrooms_input_predice", label = "Bathrooms")
+    ),
+    shinyreforms::validatedInput(
+        shiny::textInput("stories_input_predice", label = "Stories")
+    ),
+    shinyreforms::validatedInput(
+        shiny::checkboxInput("mainroad_input_predice", label = "Mainroad")
+    ),
+    shinyreforms::validatedInput(
+        shiny::checkboxInput("guestroom_input_predice", label = "Guestroom")
+    ),
+    shinyreforms::validatedInput(
+        shiny::checkboxInput("basement_input_predice", label = "Basement")
+    ),
+    shinyreforms::validatedInput(
+        shiny::checkboxInput("hotwaterheating_input_predice", label = "Hotwaterheating")
+    ),
+    shinyreforms::validatedInput(
+        shiny::checkboxInput("airconditioning_input_predice", label = "Airconditioning")
+    ),
+    shinyreforms::validatedInput(
+        shiny::textInput("parking_input_predice", label = "Parking")
+    ),
+    shinyreforms::validatedInput(
+        shiny::checkboxInput("prefarea_input_predice", label = "Prefarea")
+    ),
+    shinyreforms::validatedInput(
+        #shiny::textInput("furnishingstatus_input", label = "FurnishingStatus")
+        #  furnished | semi-furnished | unfurnished
+
+        shiny::selectInput("furnishingstatus_input_predice", "FurnishingStatus:",
+                c("furnished" = "furnished",
+                  "semi-furnished" = "semi-furnished",
+                  "unfurnished" = "unfurnished")),
+    )
+)
+
 actualizaForm <- shinyreforms::ShinyForm$new(
     "actualizaForm",
     submit = "Actualiza una casa",
@@ -274,7 +369,6 @@ actualizaForm <- shinyreforms::ShinyForm$new(
     )
 )
 
-
 eliminaCasaForm <- shinyreforms::ShinyForm$new(
     "eliminaCasaForm",
     submit = "Eliminar casa",
@@ -306,6 +400,25 @@ eliminaCasaForm <- shinyreforms::ShinyForm$new(
     
 )
 
+entrenaModeloForm <- shinyreforms::ShinyForm$new(
+    "entrenaModeloForm",
+    submit = "Entrena ahora",
+    onSuccess = function(self, input, output) {
+
+        res <- POST("http://api:5000/houses/train", body = listaParams, encode="form")
+
+        output$entrenaresult <- shiny::renderText({
+            "Fin de la etapa de entrenamiento"
+        })
+    },
+    onError = function(self, input, output) {
+        output$result <- shiny::renderText({
+            ""
+        })
+    }
+    
+)
+
 buscaCasaForm <- shinyreforms::ShinyForm$new(
     "buscaCasaForm",
     submit = "Buscar casa",
@@ -330,6 +443,8 @@ buscaCasaForm <- shinyreforms::ShinyForm$new(
 server <- function(input, output, session) {
     myForm$server(input, output)
     eliminaCasaForm$server(input,output)
+    entrenaModeloForm$server(input,output)
+    prediceForm$server(input,output)
     actualizaForm$server(input,output)
     buscaCasaForm$server(input,output)
     
@@ -405,6 +520,15 @@ ui <- shiny::bootstrapPage(
             column(4,
                    wellPanel(
                      
+                    shiny::tags$h1("Predice precio de casa"),
+                    prediceForm$ui(),
+                    shiny::htmlOutput("resultpredice")
+                     
+                   )
+            ),
+            column(4,
+                   wellPanel(
+                     
                      shiny::tags$h1("Busca casa por id"),
                      buscaCasaForm$ui(),
                      shiny::htmlOutput("result")
@@ -413,6 +537,11 @@ ui <- shiny::bootstrapPage(
                      shiny::tags$h1("Elimina casa por id"),
                      eliminaCasaForm$ui(),
                      shiny::htmlOutput("eliminaresult")
+                   ),
+                   wellPanel(
+                     shiny::tags$h1("Entrena modelo de casas"),
+                     entrenaModeloForm$ui(),
+                     shiny::htmlOutput("entrenaresult")
                    )
             ),
           )
