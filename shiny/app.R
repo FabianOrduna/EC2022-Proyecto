@@ -190,13 +190,13 @@ prediceForm <- shinyreforms::ShinyForm$new(
             bedrooms =  strtoi(bedrooms_p, base=0L),
             bathrooms =  strtoi(bathrooms_p, base=0L),
             stories =  strtoi(stories_p, base=0L),
-            mainroad = "true",#str(mainroad_p),
-            guestroom =  "true",#str(guestroom_p),
-            basement = "true",# str(basement_p),
-            hotwaterheating = "true",#str(hotwaterheating_p),
-            airconditioning = "true",#str(airconditioning_p),
+            mainroad = ifelse(mainroad_p, "yes", "no"),
+            guestroom =  ifelse(guestroom_p, "yes", "no"),
+            basement = ifelse(basement_p, "yes", "no"),
+            hotwaterheating = ifelse(hotwaterheating_p, "yes", "no"),
+            airconditioning = ifelse(airconditioning_p, "yes", "no"),
             parking =  strtoi(parking_p, base=0L),
-            prefarea = "true",# str(prefarea_p)
+            prefarea = ifelse(prefarea_p, "yes", "no"),
             furnishingstatus = furnishingstatus_p
         )
 
