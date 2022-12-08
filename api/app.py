@@ -317,7 +317,7 @@ def houseUpdate(id):
 
     if totalUpdates == 1:
         house = getAHouse(id)
-        response = make_response(json.dumps(house),201)
+        response = make_response(json.dumps(house),200)
         response.headers['Content-Type'] = 'application/json; charset=utf-8'            
         return response
     else:
