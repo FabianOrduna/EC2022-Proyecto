@@ -103,7 +103,7 @@ docker-compose build
 docker-compose up
 ```
 
-## Colaboradores
+# HOUSES API
 
 | Método   | Endpoint  | Parámetro                   | Cuerpo                          | Resultado                          | 
 | -------- | --------- | --------------------------- | ------------------------------- | ---------------------------------- |
