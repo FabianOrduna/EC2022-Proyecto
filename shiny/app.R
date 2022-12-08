@@ -405,7 +405,7 @@ entrenaModeloForm <- shinyreforms::ShinyForm$new(
     submit = "Entrena ahora",
     onSuccess = function(self, input, output) {
 
-        res <- POST("http://api:5000/houses/train", body = listaParams, encode="form")
+        res <- POST("http://api:5000/houses/train")
 
         output$entrenaresult <- shiny::renderText({
             "Fin de la etapa de entrenamiento"
