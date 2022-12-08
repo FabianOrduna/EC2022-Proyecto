@@ -389,7 +389,7 @@ def housesPredictAPI():
         prediction = housesPredict(x)
         return {"Dólares $": prediction[0]}
     except:
-        return {"Error": "Prediction wasn't made"}
+        return {"Error": "No se pudo realizar la predicción"}
 
 
 if __name__ == '__main__':
