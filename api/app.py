@@ -1,7 +1,7 @@
 import psycopg2
 from flask import Flask, make_response, request
 import json
-from model import update_model
+from model import housesTrain, housesPredict
 
 app = Flask(__name__)
 
@@ -323,18 +323,19 @@ def houseDelete(id):
         return response
 
 # UPDATE MODEL
-@app.route("/update_model", methods=['POST'])
-def update_model_api():
+@app.route("/houses/train", methods=['POST'])
+def housesTrain():
     con, cursor = getConnectionCursor()
-    update_model(con)
+    housesTrain(con)
     return True
 
 # EVAL MODEL
-@app.route("/predict_model", methods=['POST'])
-def predict_model_api(json):
+@app.route("/houses/predict", methods=['POST'])
+def housesPredict(json):
     con, cursor = getConnectionCursor()
-    predict_model(con)
-    return True
+    housesPredict(con)
+    return(prediction)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0') # This statement starts the server on your local machine.
